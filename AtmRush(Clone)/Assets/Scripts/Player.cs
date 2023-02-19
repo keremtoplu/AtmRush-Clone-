@@ -4,7 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    // Start is called before the first frame update
+
+    [SerializeField]
+    private float turnSpeed=1f;
+    private Touch touch;
+    
     void Start()
     {
         
@@ -14,6 +18,17 @@ public class Player : MonoBehaviour
     void Update()
     {
         transform.position+=Vector3.forward*Time.deltaTime;
+        if(Input.touchCount>0)
+        {
+            Debug.Log("asd");
+            touch=Input.GetTouch(0);
+            if(touch.phase==TouchPhase.Moved)
+            {
+                Debug.Log("asd");
+                transform.position=new Vector3(transform.position.x+touch.deltaPosition.x*turnSpeed,transform.position.y,transform.position.z);
+            }
+        }
+        Debug.Log(Input.touchCount);
     }
 
 
@@ -23,7 +38,6 @@ public class Player : MonoBehaviour
         if(collectable!=null)
         {
             collectable.Collect();
-            Debug.Log("asd");
         }
     }
     

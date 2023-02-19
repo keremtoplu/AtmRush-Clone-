@@ -14,27 +14,37 @@ public class StackManager : MonoBehaviour
    private Player player;
 
 
-   
-   public List<GameObject> Collecteds=>collecteds;
 
    public void AddStack(GameObject gameObject)
    {
-      gameObject.transform.position=collecteds[collecteds.Count-1].transform.position+offSet;
+      if(collecteds.Count==0)
+      {
+         gameObject.transform.position=player.transform.position+offSet;
+      }
+      else
+      {
+         gameObject.transform.position=collecteds[collecteds.Count-1].transform.position+offSet;
+      }
       gameObject.transform.SetParent(player.transform);
       collecteds.Add(gameObject);
-      MakeObjectsBigger();
+      StartCoroutine(MakeObjectsBigger());
       
    }
 
 
-   private void MakeObjectsBigger()
+   private IEnumerator MakeObjectsBigger()
    {
       
       var scale=collecteds[0].transform.localScale;
-      for (int i = collecteds.Count-1; i <=0 ; i--)
+      for (int i = collecteds.Count-1; i >=0 ; i--)
       {
-         collecteds[i].LeanScale(new Vector3(2,2,2),2f).setOnComplete(()=>{collecteds[i].LeanScale(scale,2f);});
+         int index=i;
+         collecteds[index].LeanScale(new Vector3(1,1,1),.1f).setOnComplete(()=>{collecteds[index].LeanScale(scale,.1f);});
+
+         yield return new WaitForSeconds(0.05f);
       }
+
+
    }
    
 }
